@@ -20,5 +20,7 @@ router.get("/updateadminProduct/:id", AdminController.updateadminproductControle
 router.put("/updatesingleproduct/:id", AdminController.updatesingleproduct)
 router.delete("/adminProductdelete/:id" , AdminController.deletesingleproduct)
 
+/////////////////////// User Product router ////////////////////////////////////////////////
+router.get("/Product", controllers.eproductControler  )
 
 module.exports = router;

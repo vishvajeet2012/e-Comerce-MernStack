@@ -71,6 +71,7 @@ function ProductManagement() {
                                 <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}><strong>Description</strong></TableCell>
                                 <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}><strong>Price</strong></TableCell>
                                 <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}><strong>Rating</strong></TableCell>
+                                <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}><strong>Status</strong></TableCell> {/* New Status column */}
                                 <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}><strong>Actions</strong></TableCell>
                             </TableRow>
                         </TableHead>
@@ -81,6 +82,7 @@ function ProductManagement() {
                                     <TableCell>{product.pdesc}</TableCell>
                                     <TableCell>{`₹${product.pprice}`}</TableCell>
                                     <TableCell>{product.prating}</TableCell>
+                                    <TableCell>{product.ProductStatus}</TableCell> {/* Display ProductStatus */}
                                     <TableCell>
                                         <IconButton color="primary" component={Link} to={`/updateproduct/${product._id}`}>
                                             <EditIcon />

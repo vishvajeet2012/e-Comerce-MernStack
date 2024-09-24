@@ -1,4 +1,7 @@
 const regSchema = require("../models/Reg");
+const adminProduct = require("../models/adminField");
+
+
 
 exports.homepagecontroler = (req, res) => {
   res.send("This is the home page using backend");
@@ -61,3 +64,9 @@ exports.LoginDataControler = async (req, res) => {
     res.status(500).json({ message: "Login failed. Please try again later." });
   }
 };
+
+
+exports.eproductControler = async (req, res)=>{
+      const record = await adminProduct.find()
+          res.json({data:record})
+}
