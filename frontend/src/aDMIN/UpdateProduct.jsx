@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, Typography, Box, Snackbar } from '@mui/material';
+import { TextField, Button, Typography, Box, Snackbar, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function UpdateProduct() {
@@ -11,6 +11,7 @@ function UpdateProduct() {
         pdesc: '',
         pprice: '',
         prating: '',
+        ProductStatus: 'IN-STOCK',
     });
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -58,6 +59,10 @@ function UpdateProduct() {
         setSnackbarOpen(false);
     };
 
+    const handleChange = (e) => {
+        setValue({ ...value, [e.target.name]: e.target.value });
+    };
+
     return (
         <Box
             component="form"
@@ -72,6 +77,7 @@ function UpdateProduct() {
                 backgroundColor: '#fff',
                 maxWidth: '400px',
                 margin: 'auto',
+                mt: 4,
             }}
         >
             <Typography variant="h5" sx={{ marginBottom: 2 }}>
@@ -79,46 +85,63 @@ function UpdateProduct() {
             </Typography>
             <TextField
                 label="Title"
+                name="ptitle"
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 value={value.ptitle}
-                onChange={(e) => setValue({ ...value, ptitle: e.target.value })}
+                onChange={handleChange}
             />
             <TextField
                 label="Description"
+                name="pdesc"
                 variant="outlined"
                 multiline
                 rows={4}
                 fullWidth
                 margin="normal"
                 value={value.pdesc}
-                onChange={(e) => setValue({ ...value, pdesc: e.target.value })}
+                onChange={handleChange}
             />
             <TextField
                 label="Price"
+                name="pprice"
                 variant="outlined"
                 type="number"
                 fullWidth
                 margin="normal"
                 value={value.pprice}
-                onChange={(e) => setValue({ ...value, pprice: e.target.value })}
+                onChange={handleChange}
             />
             <TextField
                 label="Rating"
+                name="prating"
                 variant="outlined"
                 type="number"
                 inputProps={{ min: 1, max: 5 }}
                 fullWidth
                 margin="normal"
                 value={value.prating}
-                onChange={(e) => setValue({ ...value, prating: e.target.value })}
+                onChange={handleChange}
             />
+            <FormControl fullWidth margin="normal">
+                <InputLabel>Status</InputLabel>
+                <Select
+                    name="ProductStatus"
+                    value={value.ProductStatus}
+                    onChange={handleChange}
+                    label="Status"
+                >
+                    <MenuItem value="IN-STOCK">In Stock</MenuItem>
+                    <MenuItem value="OUT-OF-STOCK">Out of Stock</MenuItem>
+                </Select>
+            </FormControl>
             <Button
                 variant="contained"
                 color="primary"
                 sx={{ marginTop: 2 }}
                 type="submit"
+                fullWidth
             >
                 Update Product
             </Button>
