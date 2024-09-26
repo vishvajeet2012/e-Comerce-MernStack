@@ -32,7 +32,8 @@ const id = (req.params.id)
 }
 
 exports.updatesingleproduct = async(req,res)=>{
-const {ptitle,pdesc , pprice ,prating } =   req.body
+    console.log(req.body)
+const {ptitle,pdesc , pprice ,prating ,ProductStatus} =   req.body
   const id  = req.params.id
     
     const record  =  await AdminProductSchema.findByIdAndUpdate(id,{
@@ -40,7 +41,8 @@ const {ptitle,pdesc , pprice ,prating } =   req.body
         ptitle:ptitle,
         pdesc:pdesc,
         pprice:pprice,
-        prating:prating
+        prating:prating,
+        ProductStatus:ProductStatus
       })
             res.json({message:"Successfully Update data.."})
 }
