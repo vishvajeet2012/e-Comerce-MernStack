@@ -11,13 +11,16 @@ function UpdateProduct() {
         pdesc: '',
         pprice: '',
         prating: '',
-        ProductStatus: 'IN-STOCK',
+        ProductStatus: '',
     });
+    
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
 
     useEffect(() => {
+            
         const fetchProduct = async () => {
+            console.log(value.ProductStatus)
             try {
                 const response = await fetch(`/api/updateadminProduct/${id}`);
                 const result = await response.json();
@@ -61,6 +64,7 @@ function UpdateProduct() {
 
     const handleChange = (e) => {
         setValue({ ...value, [e.target.name]: e.target.value });
+
     };
 
     return (
@@ -132,7 +136,7 @@ function UpdateProduct() {
                     onChange={handleChange}
                     label="Status"
                 >
-                    <MenuItem value="IN-STOCK">In Stock</MenuItem>
+                    <MenuItem  value="IN-STOCK">In Stock</MenuItem>
                     <MenuItem value="OUT-OF-STOCK">Out of Stock</MenuItem>
                 </Select>
             </FormControl>
