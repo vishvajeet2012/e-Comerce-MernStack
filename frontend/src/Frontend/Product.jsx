@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, CardMedia, Typography, Button, Rating, Grid, Snackbar } from '@mui/material';
+import Query from './Query';
 
 function Product() {
     const [products, setProducts] = useState([]);
@@ -30,6 +31,7 @@ function Product() {
     };
 
     return (
+        <>
         <Box sx={{ flexGrow: 1, padding: '2rem' }}>
             <Grid container spacing={2}>
                 {products.map((product) => (
@@ -86,8 +88,11 @@ function Product() {
                 onClose={handleSnackbarClose}
                 message={snackbarMessage}
                 autoHideDuration={3000}
-            />     
+            /> 
+
         </Box>
+            <Query/> 
+            </>
     );
 }
 

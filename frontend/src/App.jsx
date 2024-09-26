@@ -25,8 +25,9 @@ function App() {
 
     <Route path="/"  element = {<Logi/>} />
     <Route path="/Regestration" element = {<Regestration/>}/>
-    <Route path="/Product" element = {<Product></Product>} />
 
+    <Route path="/Product" element = {<Product></Product>} />
+ 
   
     <Route path="/Admin"  element ={<Admin/>} />
     <Route path="/PrdouctMang"  element ={<ProductManagement/>} />
