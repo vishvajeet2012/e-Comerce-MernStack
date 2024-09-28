@@ -1,6 +1,6 @@
 const regSchema = require("../models/Reg");
 const adminProduct = require("../models/adminField");
-
+const queryCollection   = require("../models/query")          
 
 
 exports.homepagecontroler = (req, res) => {
@@ -51,7 +51,7 @@ exports.LoginDataControler = async (req, res) => {
       return res.status(400).json({ message: "Email not found." });
     }
 
-    // Check if the passwords match
+    //check if 
     if (userCheck.userPass !== pass) {
       return res.status(400).json({ message: "Incorrect password." });
     }
@@ -69,4 +69,17 @@ exports.LoginDataControler = async (req, res) => {
 exports.eproductControler = async (req, res)=>{
       const record = await adminProduct.find()
           res.json({data:record})
+}
+
+
+exports.querydataControler =async(req,res) =>{
+       const {name , yourQuery} = req.body
+    console.log(req.body)
+       const record =  new queryCollection({
+                UserMail:name
+                ,userQuery:yourQuery
+              })
+              await record.save()
+              res.json({message:"Successfull send Query"})
+
 }

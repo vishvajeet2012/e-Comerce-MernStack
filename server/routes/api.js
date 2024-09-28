@@ -22,5 +22,6 @@ router.delete("/adminProductdelete/:id" , AdminController.deletesingleproduct)
 
 /////////////////////// User Product router ////////////////////////////////////////////////
 router.get("/Product", controllers.eproductControler  )
+router.post("/querydata", controllers.querydataControler)
 
 module.exports = router;

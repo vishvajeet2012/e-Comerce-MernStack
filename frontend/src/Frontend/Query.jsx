@@ -1,18 +1,36 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 
 function Query() {
     const [name, setName] = useState('');
     const [yourQuery, setYourQuery] = useState('');
 
+    const fromdata = { name, yourQuery };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log('Name:', name);
-        console.log('Query:', yourQuery);
+
+        fetch("/api/querydata", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(fromdata)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.message) {
+                toast.success(data.message);
+            } else {
+                toast.error("Query not sent");
+            }
+        })
+        .catch((error) => {
+            toast.error("An error occurred");
+            console.error("Error:", error);
+        });
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-white"> {/* Background color set to white */}
+        <div className="flex items-center justify-center min-h-screen bg-white">
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg w-96">
                 <h1 className="text-2xl font-bold text-center mb-6">Query Form</h1>
                 <div className="mb-4">
