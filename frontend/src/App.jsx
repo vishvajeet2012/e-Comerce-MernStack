@@ -12,6 +12,7 @@ import Admin from './aDMIN/Admin'
 import ProductManagement from './aDMIN/ProductManagement'
 import Productlist from './aDMIN/Productlist'
 import UpdateProduct from './aDMIN/UpdateProduct'
+import QueryManagement from './aDMIN/QueryManagement'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -33,6 +34,7 @@ function App() {
     <Route path="/PrdouctMang"  element ={<ProductManagement/>} />
     <Route path="/Productlist" element={<Productlist/>} />  
   <Route path='/updateproduct/:id' element={<UpdateProduct/>} />
+  <Route path='/queryManagement' element={<QueryManagement/>}/>
 
 
          </Routes>
