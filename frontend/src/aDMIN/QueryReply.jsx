@@ -53,7 +53,7 @@ function QueryReply() {
             <div className="bg-white shadow-md rounded-lg p-6 max-w-xl mx-auto">
                 <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2" htmlFor="toEmail">
-                        To (Customer Email) <span className="text-red-500">*</span>
+                        To  <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="email"
@@ -67,7 +67,7 @@ function QueryReply() {
 
                 <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2" htmlFor="fromEmail">
-                        From (Admin Email) <span className="text-red-500">*</span>
+                        From <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="email"
@@ -95,7 +95,7 @@ function QueryReply() {
 
                 <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2" htmlFor="body">
-                        Body (Reply) <span className="text-red-500">*</span>
+                        Body  <span className="text-red-500">*</span>
                     </label>
                     <textarea
                         value={body}
