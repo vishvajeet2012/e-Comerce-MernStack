@@ -36,7 +36,7 @@ function App() {
     <Route path="/Productlist" element={<Productlist/>} />  
   <Route path='/updateproduct/:id' element={<UpdateProduct/>} />
   <Route path='/queryManagement' element={<QueryManagement/>}/>
-  <Route path='/queryReply' element={<QueryReply/>}/>
+  <Route path='/queryReply/:id' element={<QueryReply/>}/>
 
 
          </Routes>
