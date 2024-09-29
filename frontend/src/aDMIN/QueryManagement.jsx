@@ -4,12 +4,18 @@ import toast from 'react-hot-toast';
 function QueryManagement() {
     const [queries, setQueries] = useState([]);
 
-    // Fetch queries using .then instead of async/await
+
     useEffect(() => {
         fetch("/api/queries")
             .then((response) => response.json())
             .then((result) => {
-                setQueries(result.data); // Assuming result.data contains the list of queries
+                console.log(result.data);
+                if (Array.isArray(result.data)) {
+                    setQueries(result.data); // Set the queries state if it's an array
+                } else {
+                    console.error('Expected an array of queries, got:', result.data);
+                    toast.error("Unexpected data format.");
+                }
             })
             .catch((error) => {
                 console.error("Error fetching queries:", error);
@@ -17,62 +23,34 @@ function QueryManagement() {
             });
     }, []);
 
-    // Handle query resolve using .then
-    const handleResolve = (id) => {
-        fetch(`/api/resolvequery/${id}`, { method: 'PUT' })
-            .then((res) => res.json())
-            .then((data) => {
-                toast.success(`Query resolved: ${id}`);
-                setQueries(queries.filter(query => query.id !== id)); // Remove resolved query
-            })
-            .catch((error) => {
-                console.error("Error resolving query:", error);
-                toast.error("Failed to resolve query.");
-            });
-    };
-
-    // Handle query delete using .then
-    const handleDelete = (id) => {
-        fetch(`/api/deletequery/${id}`, { method: 'DELETE' })
-            .then((res) => res.json())
-            .then((data) => {
-                toast.success(`Query deleted: ${id}`);
-                setQueries(queries.filter(query => query.id !== id)); // Remove deleted query
-            })
-            .catch((error) => {
-                console.error("Error deleting query:", error);
-                toast.error("Failed to delete query.");
-            });
-    };
-
     return (
         <div className="min-h-screen bg-gray-50 p-8">
             <h1 className="text-4xl font-bold mb-6 text-center text-blue-600">Query Management</h1>
 
-            {queries.length > 0 ? (
+            {queries && queries.length > 0 ? (  // Ensure the array exists and has length
                 <div className="overflow-x-auto">
                     <table className="min-w-full bg-white shadow-md rounded-lg border">
                         <thead>
-                            <tr className="bg-blue-100">
-                                <th className="py-3 px-6 text-left text-blue-800">Name</th>
-                                <th className="py-3 px-6 text-left text-blue-800">Query</th>
+                            <tr className="bg-blue-200">
+                                <th className="py-3 px-6 text-left text-blue-800">User Mail</th>
+                                <th className="py-3 px-6 text-left text-blue-800">User Query</th>
                                 <th className="py-3 px-6 text-center text-blue-800">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {queries.map((query) => (
-                                <tr key={query.id} className="bg-white border-b hover:bg-blue-50">
-                                    <td className="py-3 px-6">{query.name}</td>
-                                    <td className="py-3 px-6">{query.query}</td>
+                            {queries.map((query, index) => (
+                                <tr key={index} className="bg-white border-b hover:bg-blue-50">
+                                    <td className="py-3 px-6">{query.UserMail}</td>
+                                    <td className="py-3 px-6">{query.userQuery}</td>
                                     <td className="py-3 px-6 text-center">
                                         <button
-                                            onClick={() => handleResolve(query.id)}
+                                            onClick={() => handleResolve(index)}
                                             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
                                         >
                                             Resolve
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(query.id)}
+                                            onClick={() => handleDelete(index)}
                                             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition ml-2"
                                         >
                                             Delete

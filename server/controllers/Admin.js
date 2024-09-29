@@ -1,5 +1,6 @@
-const AdminProductSchema = require("../models/adminField"); // store data
 
+const AdminProductSchema = require("../models/adminField"); // store data
+ const queries =require("../models/query")
 exports.AddProductControler = async (req, res) => {
     try {
         const { title, description, price, rating } = req.body; // Correct destructuring
@@ -71,3 +72,8 @@ exports.deletesingleproduct = async (req, res) => {
         res.status(500).json({ message: "Error deleting product" });
     }
 };
+
+exports.userQueryControler =  async(req, res) =>{
+      const record=   await queries.find()
+            res.json({data:record})
+}
