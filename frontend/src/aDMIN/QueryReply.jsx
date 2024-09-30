@@ -16,11 +16,12 @@ function QueryReply() {
         fetch(`/api/queryreply/${id}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.data.UserMail); // Log the UserMail to confirm it is fetched
-                setToEmail(data.data.UserMail); // Set toEmail with fetched UserMail
-                setFromEmail(''); // Initialize fromEmail
-                setSubject(''); // Initialize subject
-                setBody(''); // Initialize body
+                if (data && data.data && data.data.UserMail) {
+                    setToEmail(data.data.UserMail); // Set toEmail with fetched UserMail
+                } else {
+                    console.error('UserMail is not defined');
+                    toast.error('User email not found.');
+                }
             })
             .catch((error) => {
                 console.error('Error fetching query details:', error);
@@ -36,6 +37,7 @@ function QueryReply() {
 
     // Handle the reply submission
     const handleReplySubmit = () => {
+        // Validate all fields
         if (!toEmail || !fromEmail || !subject || !body) {
             toast.error('All fields are required!');
             return;
@@ -46,18 +48,39 @@ function QueryReply() {
             return;
         }
 
-        // Simulate reply submission (e.g., API call)
-        console.log("To:", toEmail);
-        console.log("From:", fromEmail);
-        console.log("Subject:", subject);
-        console.log("Body:", body);
-        toast.success('Reply sent successfully');
+        // Prepare data to send
+        const replyData = {
+            toEmail,
+            fromEmail,
+            subject,
+            body,
+        };
 
-        // Clear the form fields after submission
-        setToEmail('');
-        setFromEmail('');
-        setSubject('');
-        setBody('');
+        // Send data to backend with POST request
+        fetch('/api/sendreply', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(replyData),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    toast.success('Reply sent successfully');
+                    // Clear the form fields after submission
+                    setToEmail('');
+                    setFromEmail('');
+                    setSubject('');
+                    setBody('');
+                } else {
+                    toast.error('Failed to send reply');
+                }
+            })
+            .catch((error) => {
+                console.error('Error sending reply:', error);
+                toast.error('An error occurred while sending the reply.');
+            });
     };
 
     return (
@@ -71,7 +94,7 @@ function QueryReply() {
                     </label>
                     <input
                         type="email"
-                        value={toEmail} // Display the fetched user email here
+                        value={toEmail}
                         onChange={(e) => setToEmail(e.target.value)}
                         placeholder="Enter customer's email"
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"

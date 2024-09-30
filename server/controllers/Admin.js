@@ -1,6 +1,11 @@
 
 const AdminProductSchema = require("../models/adminField"); // store data
- const queries =require("../models/query")
+    const queries =require("../models/query")
+    const nodemailer = require("nodemailer");
+
+
+ 
+
 exports.AddProductControler = async (req, res) => {
     try {
         const { title, description, price, rating } = req.body; // Correct destructuring
@@ -83,5 +88,12 @@ exports.queryreplaydata = async (req,res) =>{
       const record = await queries.findById(id)
       res.json({data:record})
 
+
+}
+
+exports.QueryReplaysendcontroler = (req,res)=>{
+        console.log(req.body)
+
+        
 
 }
