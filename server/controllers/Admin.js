@@ -91,9 +91,32 @@ exports.queryreplaydata = async (req,res) =>{
 
 }
 
-exports.QueryReplaysendcontroler = (req,res)=>{
-        console.log(req.body)
+exports.QueryReplaysendcontroler = async(req,res)=>{
+    const {toEmail, fromEmail,subject,body}= req.body
 
-        
+        const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // true for port 465, false for other ports
+  auth: {
+    user: "djritikshukla@gmail.com  ",
+    pass: "xinkmlmhpwkjjtov",
+  },
 
+
+
+
+
+
+
+})
+const info = await transporter.sendMail({
+    from: 'djritikshukla@gmail.com', // sender address
+    to: toEmail, // list of receivers
+    subject: subject, // Subject line
+    text: body, // plain text body
+    html: body, // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
 }
