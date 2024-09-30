@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function QueryReply() {
-    const { id } = useParams(); // Get the query ID from the route parameters
+    const { id } = useParams(); 
+    const navigate = useNavigate();
 
-    // State to handle email input fields
     const [toEmail, setToEmail] = useState('');
     const [fromEmail, setFromEmail] = useState('');
     const [subject, setSubject] = useState('');
     const [body, setBody] = useState('');
+    const [isSending, setIsSending] = useState(false); // New state for disabling the button
 
-    // Fetch the query details based on ID
     useEffect(() => {
         fetch(`/api/queryreply/${id}`)
             .then((res) => res.json())
             .then((data) => {
                 if (data && data.data && data.data.UserMail) {
-                    setToEmail(data.data.UserMail); // Set toEmail with fetched UserMail
+                    setToEmail(data.data.UserMail);
                 } else {
                     console.error('UserMail is not defined');
                     toast.error('User email not found.');
@@ -29,15 +29,12 @@ function QueryReply() {
             });
     }, [id]);
 
-    // Email validation function
     const isValidEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
-    // Handle the reply submission
     const handleReplySubmit = () => {
-        // Validate all fields
         if (!toEmail || !fromEmail || !subject || !body) {
             toast.error('All fields are required!');
             return;
@@ -48,7 +45,8 @@ function QueryReply() {
             return;
         }
 
-        // Prepare data to send
+        setIsSending(true); // Disable the button
+
         const replyData = {
             toEmail,
             fromEmail,
@@ -56,7 +54,6 @@ function QueryReply() {
             body,
         };
 
-        // Send data to backend with POST request
         fetch('/api/sendreply', {
             method: 'POST',
             headers: {
@@ -68,7 +65,7 @@ function QueryReply() {
             .then((data) => {
                 if (data.success) {
                     toast.success('Reply sent successfully');
-                    // Clear the form fields after submission
+                    navigate("/queryManagement");
                     setToEmail('');
                     setFromEmail('');
                     setSubject('');
@@ -80,7 +77,8 @@ function QueryReply() {
             .catch((error) => {
                 console.error('Error sending reply:', error);
                 toast.error('An error occurred while sending the reply.');
-            });
+            })
+            .finally(() => setIsSending(false)); // Re-enable the button after submission
     };
 
     return (
@@ -138,7 +136,7 @@ function QueryReply() {
                         value={body}
                         onChange={(e) => setBody(e.target.value)}
                         placeholder="Type your reply..."
-                        className="w-full h-28 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 resize-none"
+                        className="w-full h-40 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 resize-none"
                         required
                     />
                 </div>
@@ -146,9 +144,10 @@ function QueryReply() {
                 <div className="text-center">
                     <button
                         onClick={handleReplySubmit}
-                        className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+                        className={`bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition ${isSending && 'opacity-50 cursor-not-allowed'}`}
+                        disabled={isSending}
                     >
-                        Send Reply
+                        {isSending ? 'Sending...' : 'Send Reply'}
                     </button>
                 </div>
             </div>

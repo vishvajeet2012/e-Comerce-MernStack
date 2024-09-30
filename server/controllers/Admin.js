@@ -16,7 +16,7 @@ exports.AddProductControler = async (req, res) => {
             prating: rating
         });
 
-        await record.save(); // Save the record in the database
+        await record.save(); 
         
         res.status(201).json({ message: "Product added successfully!" }); // Send success response
     } catch (error) {
@@ -91,32 +91,50 @@ exports.queryreplaydata = async (req,res) =>{
 
 }
 
-exports.QueryReplaysendcontroler = async(req,res)=>{
-    const {toEmail, fromEmail,subject,body}= req.body
 
+exports.QueryReplaysendcontroler = async (req, res) => {
+    const { toEmail, fromEmail, subject, body } = req.body;
+
+   
+    if (!toEmail || !fromEmail || !subject || !body) {
+        return res.status(400).json({ success: false, message: 'All fields are required!' });
+    }
+
+   
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    if (!isValidEmail(toEmail) || !isValidEmail(fromEmail)) {
+        return res.status(400).json({ success: false, message: 'Invalid email format.' });
+    }
+
+    try {
+        
         const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // true for port 465, false for other ports
-  auth: {
-    user: "djritikshukla@gmail.com  ",
-    pass: "xinkmlmhpwkjjtov",
-  },
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false, 
+            auth: {
+                user: 'djritikshukla@gmail.com', 
+                pass: 'xinkmlmhpwkjjtov',        
+            },
+        });
 
+        const info = await transporter.sendMail({
+            from: fromEmail,   
+                    to: toEmail, 
+            subject: subject, // Subject line
+            text: body, // plain text body
+            html: `<p>${body}</p>`, // html body
+        });
 
+        console.log("Message sent: %s", info.messageId);
 
-
-
-
-
-})
-const info = await transporter.sendMail({
-    from: 'djritikshukla@gmail.com', // sender address
-    to: toEmail, // list of receivers
-    subject: subject, // Subject line
-    text: body, // plain text body
-    html: body, // html body
-  });
-
-  console.log("Message sent: %s", info.messageId);
-}
+        return res.status(200).json({ success: true, message: 'Email sent successfully.' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).json({ success: false, message: 'Failed to send email.' });
+    }
+};
