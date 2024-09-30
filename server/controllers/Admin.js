@@ -77,3 +77,11 @@ exports.userQueryControler =  async(req, res) =>{
       const record=   await queries.find()
             res.json({data:record})
 }
+
+exports.queryreplaydata = async (req,res) =>{ 
+ const id= await req.params.id
+      const record = await queries.findById(id)
+      res.json({data:record})
+
+
+}

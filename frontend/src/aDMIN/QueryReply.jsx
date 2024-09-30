@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
 
 function QueryReply() {
+    const { id } = useParams(); // Get the query ID from the route parameters
+
     // State to handle email input fields
     const [toEmail, setToEmail] = useState('');
     const [fromEmail, setFromEmail] = useState('');
     const [subject, setSubject] = useState('');
     const [body, setBody] = useState('');
 
-    // Handle input changes
-    const handleToEmailChange = (e) => setToEmail(e.target.value);
-    const handleFromEmailChange = (e) => setFromEmail(e.target.value);
-    const handleSubjectChange = (e) => setSubject(e.target.value);
-    const handleBodyChange = (e) => setBody(e.target.value);
+    // Fetch the query details based on ID
+    useEffect(() => {
+        fetch(`/api/queryreply/${id}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data.data.UserMail); // Log the UserMail to confirm it is fetched
+                setToEmail(data.data.UserMail); // Set toEmail with fetched UserMail
+                setFromEmail(''); // Initialize fromEmail
+                setSubject(''); // Initialize subject
+                setBody(''); // Initialize body
+            })
+            .catch((error) => {
+                console.error('Error fetching query details:', error);
+                toast.error('Failed to load query details.');
+            });
+    }, [id]);
 
     // Email validation function
     const isValidEmail = (email) => {
@@ -53,12 +67,12 @@ function QueryReply() {
             <div className="bg-white shadow-md rounded-lg p-6 max-w-xl mx-auto">
                 <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2" htmlFor="toEmail">
-                        To  <span className="text-red-500">*</span>
+                        To <span className="text-red-500">*</span>
                     </label>
                     <input
                         type="email"
-                        value={toEmail}
-                        onChange={handleToEmailChange}
+                        value={toEmail} // Display the fetched user email here
+                        onChange={(e) => setToEmail(e.target.value)}
                         placeholder="Enter customer's email"
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                         required
@@ -72,7 +86,7 @@ function QueryReply() {
                     <input
                         type="email"
                         value={fromEmail}
-                        onChange={handleFromEmailChange}
+                        onChange={(e) => setFromEmail(e.target.value)}
                         placeholder="Enter your email (admin)"
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                         required
@@ -86,7 +100,7 @@ function QueryReply() {
                     <input
                         type="text"
                         value={subject}
-                        onChange={handleSubjectChange}
+                        onChange={(e) => setSubject(e.target.value)}
                         placeholder="Enter subject"
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                         required
@@ -95,11 +109,11 @@ function QueryReply() {
 
                 <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2" htmlFor="body">
-                        Body  <span className="text-red-500">*</span>
+                        Body <span className="text-red-500">*</span>
                     </label>
                     <textarea
                         value={body}
-                        onChange={handleBodyChange}
+                        onChange={(e) => setBody(e.target.value)}
                         placeholder="Type your reply..."
                         className="w-full h-28 p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 resize-none"
                         required

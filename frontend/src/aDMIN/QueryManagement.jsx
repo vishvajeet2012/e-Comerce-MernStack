@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { Link, useParams } from 'react-router-dom';
 
 function QueryManagement() {
     const [queries, setQueries] = useState([]);
-
-
+       
     useEffect(() => {
         fetch("/api/queries")
             .then((response) => response.json())
@@ -43,12 +43,12 @@ function QueryManagement() {
                                     <td className="py-3 px-6">{query.UserMail}</td>
                                     <td className="py-3 px-6">{query.userQuery}</td>
                                     <td className="py-3 px-6 text-center">
-                                        <button
+                                      <Link to={`/queryReply/${query._id}`}> <button
                                             onClick={() => handleResolve(index)}
                                             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
                                         >
                                             Resolve
-                                        </button>
+                                        </button> </Link>
                                         <button
                                             onClick={() => handleDelete(index)}
                                             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition ml-2"

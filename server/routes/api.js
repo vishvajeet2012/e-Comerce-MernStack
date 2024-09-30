@@ -20,6 +20,7 @@ router.get("/updateadminProduct/:id", AdminController.updateadminproductControle
 router.put("/updatesingleproduct/:id", AdminController.updatesingleproduct)
 router.delete("/adminProductdelete/:id" , AdminController.deletesingleproduct)
 router.get("/queries", AdminController.userQueryControler)
+router.get("/queryreply/:id",AdminController.queryreplaydata)
 
 /////////////////////// User Product router ////////////////////////////////////////////////
 router.get("/Product", controllers.eproductControler  )
