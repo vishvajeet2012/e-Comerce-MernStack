@@ -3,7 +3,8 @@
 
      const QuerySchema =   new Schema ({
             UserMail:String
-            ,userQuery:String
+            ,userQuery:String,
+            queryStatus:{type:String,default:"Unread"}
      })
 
 
