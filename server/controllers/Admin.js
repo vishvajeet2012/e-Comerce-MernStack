@@ -7,6 +7,7 @@ const AdminProductSchema = require("../models/adminField"); // store data
  
 
 exports.AddProductControler = async (req, res) => {
+    console.log(req.file)
     try {
         const { title, description, price, rating } = req.body; // Correct destructuring
         const record = new AdminProductSchema({

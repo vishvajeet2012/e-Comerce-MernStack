@@ -8,7 +8,7 @@ function ProductList() {
     const [price, setPrice] = useState('');
     const [rating, setRating] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false); 
-    const [imgUp , setImg] = useState("")
+    const [imgUp, setImg] = useState(null); // Set initial state for the image upload
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -27,36 +27,36 @@ function ProductList() {
             return;
         }
 
-        // const productData = { title, description, price, rating };
-        const productData = new ProductData()
-            productData.append("titile" , titile)
-            productData.append("desc" , description)
-            productData.append("price",price)
-            productData.append("rating",rating)
-            productData.append("img" , imgUp)
+        const productData = new FormData();
+        productData.append("title", title); // Corrected "titile" to "title"
+        productData.append("description", description);
+        productData.append("price", price);
+        productData.append("rating", rating);
+        productData.append("imgUp", imgUp); // Attach image file
 
         try {
             toast.loading("Sending data..."); 
             const response = await fetch("/api/adminProduct", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(productData)
+                body: productData, // Send FormData directly
             });
 
             if (response.ok) {
                 toast.dismiss(); 
                 toast.success("Product added successfully!");
-                setTitle(''); // Clear the form
+                // Clear the form after submission
+                setTitle('');
                 setDescription('');
                 setPrice('');
                 setRating('');
-            } else {'n'
+                setImg(null); // Reset image input
+            } else {
                 const errorData = await response.json();
-                toast.dismiss(); // Dismiss loading toast
+                toast.dismiss(); 
                 toast.error(errorData.message || "Failed to add product.");
             }
         } catch (error) {
-            toast.dismiss(); // Dismiss loading toast
+            toast.dismiss(); 
             toast.error("An error occurred: " + error.message);
         } finally {
             setIsSubmitting(false); 
@@ -65,7 +65,6 @@ function ProductList() {
 
     return (
         <div className="flex flex-col w-11/12 mx-auto mt-4">
-            
             <Left />
             <div className="bg-gradient-to-r from-blue-100 to-blue-200 shadow-lg rounded-lg p-8 mt-4">
                 <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Product List</h1>
@@ -122,18 +121,17 @@ function ProductList() {
                             />
                         </div>
                         <div className="flex-1">
-                <label htmlFor="image" className="block text-lg font-medium text-gray-700">Product Image</label>
-                <input
-                    type="file"
-                    id="image"
-                    accept="image/*"
-                   
-                    required
-                    className="mt-2 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-                        onChange={(e)=>{setImg(e.target.files)}}
-               />
-            </div>
+                            <label htmlFor="image" className="block text-lg font-medium text-gray-700">Product Image</label>
+                            <input
+                                type="file"
+                                id="image"
+                                accept="image/*"
+                                required
+                                className="mt-2 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                                onChange={(e) => setImg(e.target.files[0])} // Get the first file
+                            />
                         </div>
+                    </div>
                     <button
                         type="submit"
                         className={`w-full bg-blue-600 text-white font-bold py-4 rounded-md hover:bg-blue-700 transition duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -143,9 +141,9 @@ function ProductList() {
                     </button>
                 </form>
             </div>
+            <Toaster /> {/* Ensure to include Toaster for toast notifications */}
         </div>
     );
 }
 
 export default ProductList;
-    
