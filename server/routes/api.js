@@ -22,6 +22,7 @@ router.delete("/adminProductdelete/:id" , AdminController.deletesingleproduct)
 router.get("/queries", AdminController.userQueryControler)
 router.get("/queryreply/:id",AdminController.queryreplaydata)
 router.post("/sendreply", AdminController.QueryReplaysendcontroler)
+router.patch("/queriesStatus/:id", AdminController.updateQueryStatus);
 
 /////////////////////// User Product router ////////////////////////////////////////////////
 router.get("/Product", controllers.eproductControler  )

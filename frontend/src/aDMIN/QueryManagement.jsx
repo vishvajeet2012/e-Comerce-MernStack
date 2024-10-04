@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 function QueryManagement() {
     const [queries, setQueries] = useState([]);
 
+    // Fetching queries from the server
     useEffect(() => {
         fetch("/api/queries")
             .then((response) => response.json())
@@ -22,8 +23,9 @@ function QueryManagement() {
             });
     }, []);
 
+    // Handle marking query as read/unread
     const handleResolve = (queryId) => {
-        fetch(`/api/queries/${queryId}/resolve`, {
+        fetch(`/api/queriesStatus/${queryId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,12 +34,12 @@ function QueryManagement() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                toast.success('Query marked as read.');
+                toast.success(`Query marked as ${data.data.queryStatus}.`);
                 setQueries(queries.map(query => 
-                    query._id === queryId ? { ...query, status: 'read' } : query
+                    query._id === queryId ? { ...query, queryStatus: data.data.queryStatus } : query
                 ));
             } else {
-                toast.error('Failed to mark as read.');
+                toast.error('Failed to update query status.');
             }
         })
         .catch(error => {
@@ -67,7 +69,7 @@ function QueryManagement() {
                                     <td className="py-3 px-6">{query.UserMail}</td>
                                     <td className="py-3 px-6">{query.userQuery}</td>
                                     <td className="py-3 px-6">
-                                        {query.status === 'unread' ? 'Un Read' : 'Read'}
+                                        {query.queryStatus === 'Unread' ? 'Un Read' : 'Read'}
                                     </td>
                                     <td className="py-3 px-6 text-center">
                                         <Link to={`/queryReply/${query._id}`}>
@@ -75,12 +77,20 @@ function QueryManagement() {
                                                 Reply
                                             </button>
                                         </Link>
-                                        {query.status === 'unread' && (
+                                        {query.queryStatus === 'Unread' && (
                                             <button
                                                 onClick={() => handleResolve(query._id)}
                                                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition ml-2"
                                             >
                                                 Mark as Read
+                                            </button>
+                                        )}
+                                        {query.queryStatus === 'Read' && (
+                                            <button
+                                                onClick={() => handleResolve(query._id)}
+                                                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition ml-2"
+                                            >
+                                                Mark as Unread
                                             </button>
                                         )}
                                     </td>

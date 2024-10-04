@@ -138,3 +138,40 @@ exports.QueryReplaysendcontroler = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Failed to send email.' });
     }
 };
+
+
+
+
+
+
+
+
+exports.updateQueryStatus = async (req, res) => {
+    const queryId = req.params.id;
+
+    try {
+    
+        const query = await queries.findById(queryId);
+
+        if (!query) {
+            return res.status(404).json({ success: false, message: 'Query not found' });
+        }
+
+        // Toggle the status between 'Unread' and 'Read'
+        query.queryStatus = query.queryStatus === 'Unread' ? 'Read' : 'Unread';
+
+        await query.save();
+
+        return res.status(200).json({
+            success: true,
+            message: `Query marked as ${query.queryStatus}.`,
+            data: query
+        });
+    } catch (error) {
+        console.error('Error updating query status:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to update query status.',
+        });
+    }
+};
