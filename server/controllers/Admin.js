@@ -5,26 +5,33 @@ const AdminProductSchema = require("../models/adminField"); // store data
 
 
  
-
-exports.AddProductControler = async (req, res) => {
-                const pimage = req.file.filename
-    try {
-        const { title, description, price, rating } = req.body; // Correct destructuring
-        const record = new AdminProductSchema({
-            ptitle: title,
-            pdesc: description,
-            pprice: price,
-            prating: rating,
-            Productimage:pimage
-        });
-
-        await record.save(); 
-        
-        res.status(201).json({ message: "Product added successfully!" }); // Send success response
-    } catch (error) {
-        res.status(500).json({ error: "Failed to add product", details: error.message }); // Send error response
-    }
-};
+    exports.AddProductControler = async (req, res) => {
+        // Retrieve the filename of the uploaded image
+        const pimage = req.file.filename;
+    
+        try {
+            // Destructure the incoming data from the request body
+            const { title, description, price, rating } = req.body;
+    
+            // Create a new product record
+            const record = new AdminProductSchema({
+                ptitle: title,
+                pdesc: description,
+                pprice: price,
+                prating: rating,
+                Productimage: pimage // Include the uploaded image filename
+            });
+    
+            // Save the product record to the database
+            await record.save();
+    
+            // Send a success response
+            res.status(201).json({ message: "Product added successfully!" });
+        } catch (error) {
+            // Send an error response if something goes wrong
+            res.status(500).json({ error: "Failed to add product", details: error.message });
+        }
+    };
 
 exports.alladminproductControler= async(req,res)=>{
    const record = await AdminProductSchema.find()
