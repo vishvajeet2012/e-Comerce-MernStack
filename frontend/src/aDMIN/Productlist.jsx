@@ -9,6 +9,7 @@ function ProductList() {
     const [rating, setRating] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false); 
     const [imgUp , setImg] = useState("")
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsSubmitting(true); 
@@ -26,8 +27,14 @@ function ProductList() {
             return;
         }
 
-        const productData = { title, description, price, rating };
-        
+        // const productData = { title, description, price, rating };
+        const productData = new ProductData()
+            productData.append("titile" , titile)
+            productData.append("desc" , description)
+            productData.append("price",price)
+            productData.append("rating",rating)
+            productData.append("img" , imgUp)
+
         try {
             toast.loading("Sending data..."); 
             const response = await fetch("/api/adminProduct", {
@@ -120,10 +127,11 @@ function ProductList() {
                     type="file"
                     id="image"
                     accept="image/*"
-                    onChange={(e) => setImage(e.target.files[0])}
+                   
                     required
                     className="mt-2 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-                />
+                        onChange={(e)=>{setImg(e.target.files)}}
+               />
             </div>
                         </div>
                     <button
