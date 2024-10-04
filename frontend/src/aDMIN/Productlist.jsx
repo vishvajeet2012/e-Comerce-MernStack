@@ -7,67 +7,58 @@ function ProductList() {
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [rating, setRating] = useState('');
-    const [image, setImage] = useState(null); // State for storing the image
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]); // Store the uploaded image in state
-    };
-
+    const [isSubmitting, setIsSubmitting] = useState(false); 
+    const [imgUp , setImg] = useState("")
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setIsSubmitting(true);
+        setIsSubmitting(true); 
 
-        // Validate inputs
+        // Validate the inputs
         if (price <= 0) {
             toast.error("Price must be greater than 0");
             setIsSubmitting(false);
             return;
         }
-
+        
         if (rating < 1 || rating > 5) {
             toast.error("Rating must be between 1 and 5");
             setIsSubmitting(false);
             return;
         }
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('price', price);
-        formData.append('rating', rating);
-        formData.append('image', image); // Append the image file to formData
-
+        const productData = { title, description, price, rating };
+        
         try {
-            toast.loading("Uploading product...");
+            toast.loading("Sending data..."); 
             const response = await fetch("/api/adminProduct", {
                 method: "POST",
-                body: formData, // Send formData, including the image
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(productData)
             });
 
             if (response.ok) {
-                toast.dismiss();
+                toast.dismiss(); 
                 toast.success("Product added successfully!");
-                setTitle('');
+                setTitle(''); // Clear the form
                 setDescription('');
                 setPrice('');
                 setRating('');
-                setImage(null); // Reset image state after submission
-            } else {
+            } else {'n'
                 const errorData = await response.json();
-                toast.dismiss();
+                toast.dismiss(); // Dismiss loading toast
                 toast.error(errorData.message || "Failed to add product.");
             }
         } catch (error) {
-            toast.dismiss();
+            toast.dismiss(); // Dismiss loading toast
             toast.error("An error occurred: " + error.message);
         } finally {
-            setIsSubmitting(false);
+            setIsSubmitting(false); 
         }
     };
 
     return (
         <div className="flex flex-col w-11/12 mx-auto mt-4">
+            
             <Left />
             <div className="bg-gradient-to-r from-blue-100 to-blue-200 shadow-lg rounded-lg p-8 mt-4">
                 <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Product List</h1>
@@ -123,20 +114,18 @@ function ProductList() {
                                 className="mt-2 block w-full border border-gray-300 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
                             />
                         </div>
-                    </div>
-
-                    {/* Image Upload */}
-                    <div>
-                        <label htmlFor="image" className="block text-lg font-medium text-gray-700">Upload Product Image</label>
-                        <input
-                            type="file"
-                            id="image"
-                            onChange={handleImageChange}
-                            required
-                            className="mt-2 block w-full border border-gray-300 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
-                        />
-                    </div>
-
+                        <div className="flex-1">
+                <label htmlFor="image" className="block text-lg font-medium text-gray-700">Product Image</label>
+                <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])}
+                    required
+                    className="mt-2 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                />
+            </div>
+                        </div>
                     <button
                         type="submit"
                         className={`w-full bg-blue-600 text-white font-bold py-4 rounded-md hover:bg-blue-700 transition duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -151,3 +140,4 @@ function ProductList() {
 }
 
 export default ProductList;
+    
