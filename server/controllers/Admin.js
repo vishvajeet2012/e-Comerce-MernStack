@@ -7,14 +7,15 @@ const AdminProductSchema = require("../models/adminField"); // store data
  
 
 exports.AddProductControler = async (req, res) => {
-    console.log(req.file)
+                const pimage = req.file.filename
     try {
         const { title, description, price, rating } = req.body; // Correct destructuring
         const record = new AdminProductSchema({
             ptitle: title,
             pdesc: description,
             pprice: price,
-            prating: rating
+            prating: rating,
+            Productimage:pimage
         });
 
         await record.save(); 

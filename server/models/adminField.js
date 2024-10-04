@@ -6,7 +6,8 @@ const mongoose =require("mongoose")
             pdesc:String,
             pprice:Number,
             prating:Number,
-            ProductStatus:{type:String,default:"OUT-OF-STOCK"}
+            ProductStatus:{type:String,default:"OUT-OF-STOCK"},
+            Productimage:String
 
             }
           )
