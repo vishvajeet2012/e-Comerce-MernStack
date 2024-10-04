@@ -1,71 +1,75 @@
-import Left from "./Left";
 import React, { useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast'; // Importing react-hot-toast
+import { Toaster, toast } from 'react-hot-toast'; 
+import Left from './Left';
 
 function ProductList() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [rating, setRating] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false); 
+    const [image, setImage] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setIsSubmitting(true); 
+        setIsSubmitting(true);
 
-        // Validate the inputs
         if (price <= 0) {
             toast.error("Price must be greater than 0");
             setIsSubmitting(false);
             return;
         }
-        
+
         if (rating < 1 || rating > 5) {
             toast.error("Rating must be between 1 and 5");
             setIsSubmitting(false);
             return;
         }
 
-        const productData = { title, description, price, rating };
-        
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('price', price);
+        formData.append('rating', rating);
+        if (image) formData.append('image', image);
+
         try {
-            toast.loading("Sending data..."); 
+            toast.loading("Sending data...");
             const response = await fetch("/api/adminProduct", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(productData)
+                body: formData
             });
 
             if (response.ok) {
-                toast.dismiss(); 
+                toast.dismiss();
                 toast.success("Product added successfully!");
-                setTitle(''); // Clear the form
+                setTitle('');
                 setDescription('');
                 setPrice('');
                 setRating('');
+                setImage(null);
             } else {
                 const errorData = await response.json();
-                toast.dismiss(); // Dismiss loading toast
+                toast.dismiss();
                 toast.error(errorData.message || "Failed to add product.");
             }
         } catch (error) {
-            toast.dismiss(); // Dismiss loading toast
+            toast.dismiss();
             toast.error("An error occurred: " + error.message);
         } finally {
-            setIsSubmitting(false); 
+            setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="flex flex-col w-11/12 mx-auto mt-4">
-            
+        <div className="flex flex-col w-full mx-auto mt-6 px-6 lg:px-8">
             <Left />
-            <div className="bg-gradient-to-r from-blue-100 to-blue-200 shadow-lg rounded-lg p-8 mt-4">
-                <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">Product List</h1>
+            <div className="bg-white shadow-lg rounded-lg p-8 mt-8 max-w-3xl mx-auto">
+                <h1 className="text-4xl font-extrabold text-center text-blue-800 mb-10">Add New Product</h1>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
                     <div>
-                        <label htmlFor="title" className="block text-lg font-medium text-gray-700">Product Title</label>
+                        <label htmlFor="title" className="block text-xl font-semibold text-gray-800">Product Title</label>
                         <input
                             type="text"
                             id="title"
@@ -73,23 +77,23 @@ function ProductList() {
                             onChange={(e) => setTitle(e.target.value)}
                             required
                             placeholder="Enter product title"
-                            className="mt-2 block w-full border border-gray-300 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                            className="mt-2 block w-full border border-gray-300 rounded-lg py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
                         />
                     </div>
                     <div>
-                        <label htmlFor="description" className="block text-lg font-medium text-gray-700">Product Description</label>
+                        <label htmlFor="description" className="block text-xl font-semibold text-gray-800">Product Description</label>
                         <textarea
                             id="description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             required
                             placeholder="Describe the product"
-                            className="mt-2 block w-full border border-gray-300 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                            className="mt-2 block w-full border border-gray-300 rounded-lg py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
                         />
                     </div>
-                    <div className="flex space-x-4">
-                        <div className="flex-1">
-                            <label htmlFor="price" className="block text-lg font-medium text-gray-700">Product Price</label>
+                    <div className="grid grid-cols-2 gap-6">
+                        <div>
+                            <label htmlFor="price" className="block text-xl font-semibold text-gray-800">Product Price</label>
                             <input
                                 type="number"
                                 id="price"
@@ -97,11 +101,11 @@ function ProductList() {
                                 onChange={(e) => setPrice(e.target.value)}
                                 required
                                 placeholder="Enter price"
-                                className="mt-2 block w-full border border-gray-300 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                                className="mt-2 block w-full border border-gray-300 rounded-lg py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
                             />
                         </div>
-                        <div className="flex-1">
-                            <label htmlFor="rating" className="block text-lg font-medium text-gray-700">Product Rating</label>
+                        <div>
+                            <label htmlFor="rating" className="block text-xl font-semibold text-gray-800">Product Rating</label>
                             <input
                                 type="number"
                                 id="rating"
@@ -111,13 +115,23 @@ function ProductList() {
                                 max="5"
                                 required
                                 placeholder="1-5"
-                                className="mt-2 block w-full border border-gray-300 rounded-md p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                                className="mt-2 block w-full border border-gray-300 rounded-lg py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
                             />
                         </div>
                     </div>
+                    <div>
+                        <label htmlFor="image" className="block text-xl font-semibold text-gray-800">Upload Image</label>
+                        <input
+                            type="file"
+                            id="image"
+                            onChange={(e) => setImage(e.target.files[0])}
+                            accept="image/*"
+                            className="mt-2 block w-full border border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+                        />
+                    </div>
                     <button
                         type="submit"
-                        className={`w-full bg-blue-600 text-white font-bold py-4 rounded-md hover:bg-blue-700 transition duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`w-full bg-blue-600 text-white font-bold py-4 rounded-lg hover:bg-blue-700 transition duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? "Adding..." : "Add Product"}
