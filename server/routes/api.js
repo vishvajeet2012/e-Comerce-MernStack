@@ -44,7 +44,7 @@ router.get("/queryreply/:id", AdminController.queryreplaydata);
 router.post("/sendreply", AdminController.QueryReplaysendcontroler);
 router.patch("/queriesStatus/:id", AdminController.updateQueryStatus);
 router.get("/userDataManag", AdminController.userDataManagcontroler );// user management
-
+router.put("/userstatusmanag/:id",AdminController.userStatusControler)
 
 
 
