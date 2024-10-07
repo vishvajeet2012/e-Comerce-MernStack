@@ -1,37 +1,38 @@
 
-const AdminProductSchema = require("../models/adminField"); // store data
-    const queries =require("../models/query")
-    const nodemailer = require("nodemailer");
+const AdminProductSchema = require("../models/adminField");
+const queries = require("../models/query");
+const nodemailer = require("nodemailer");
 
+exports.AddProductControler = async (req, res) => {
+    try {
+     
+        const pimage = req.file ? req.file.filename : null;
 
- 
-    exports.AddProductControler = async (req, res) => {
-        // Retrieve the filename of the uploaded image
-        const pimage = req.file.filename;
-    
-        try {
-            // Destructure the incoming data from the request body
-            const { title, description, price, rating } = req.body;
-    
-            // Create a new product record
-            const record = new AdminProductSchema({
-                ptitle: title,
-                pdesc: description,
-                pprice: price,
-                prating: rating,
-                Productimage: pimage // Include the uploaded image filename
-            });
-    
-            // Save the product record to the database
-            await record.save();
-    
-            // Send a success response
-            res.status(201).json({ message: "Product added successfully!" });
-        } catch (error) {
-            // Send an error response if something goes wrong
-            res.status(500).json({ error: "Failed to add product", details: error.message });
+      
+        const { title, description, price, rating } = req.body;
+
+        if (!title || !description || !price || !pimage) {
+            return res.status(400).json({ error: "Title, description, price, and product image are required." });
         }
-    };
+
+        // Create a new product record
+        const record = new AdminProductSchema({
+            ptitle: title,
+            pdesc: description,
+            pprice: price,
+            prating: rating || 0, // Default rating to 0 if not provided
+            Productimage: pimage // Store relative path
+        });
+
+        // Save the record to the database
+        await record.save();
+
+        res.status(201).json({ message: "Product added successfully!" });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to add product", details: error.message });
+    }
+};
+
 
 exports.alladminproductControler= async(req,res)=>{
    const record = await AdminProductSchema.find()
