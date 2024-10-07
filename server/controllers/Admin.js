@@ -2,6 +2,7 @@
 const AdminProductSchema = require("../models/adminField");
 const queries = require("../models/query");
 const nodemailer = require("nodemailer");
+const regCollection =require("../models/Reg")
 
 exports.AddProductControler = async (req, res) => {
     try {
@@ -185,3 +186,9 @@ exports.updateQueryStatus = async (req, res) => {
         });
     }
 };
+
+
+exports.userDataManagcontroler = async(req,res) =>{
+        const userdata = await regCollection.find()
+        res.json({userdata})
+}

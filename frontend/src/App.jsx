@@ -14,6 +14,7 @@ import Productlist from './aDMIN/Productlist'
 import UpdateProduct from './aDMIN/UpdateProduct'
 import QueryManagement from './aDMIN/QueryManagement'
 import QueryReply from './aDMIN/QueryReply'
+import UseManag from './aDMIN/UseManag'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,6 +38,7 @@ function App() {
   <Route path='/updateproduct/:id' element={<UpdateProduct/>} />
   <Route path='/queryManagement' element={<QueryManagement/>}/>
   <Route path='/queryReply/:id' element={<QueryReply/>}/>
+ <Route path='/userManag' element={<UseManag/>} /> 
 
 
          </Routes>
