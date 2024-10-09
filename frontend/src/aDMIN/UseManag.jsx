@@ -26,11 +26,24 @@ function UseManag() {
         setSnackbarOpen(true);
     };
 
-    const handleStatusChange = (id) => {
-        const userToUpdate = users.find(user => user._id === id);
-        const newStatus = userToUpdate.status === 'Active' ? 'Suspended' : 'Active';
+            /// handel active status 
+            const handelActiveStaus =  (id )=>{
+                const useractiveupdate =users.find(user=> user._id === id );
+                const newActiveStatus = useractiveupdate.status === Active;
+                    fetch(`/api/userActivestatus/${id}`,{
+                        method:"PUT",
+                        headers:{
+                            'Content-Type': 'application/json',
 
-        fetch(`/api/userstatusmanag/${id}`, {
+                        },
+                        body:JSON.stringify({status:newActiveStatus})
+                    })    
+            }
+
+    const handleStatusChange = (id) => {
+        // const userToUpdate = users.find(user => user._id === id);
+        // const newStatus = userToUpdate.status === 'Active' ? 'Suspended' : 'Active';
+            fetch(`/api/userstatusmanag/${id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -75,10 +88,17 @@ function UseManag() {
                                 <TableCell>
                                     <Button 
                                         variant="contained" 
-                                        color={user.userStatus === 'Active' ? 'success' : 'error'}
+                                        color={'error'}
                                         onClick={() => handleStatusChange(user._id)}
                                     >
-                                        {user.userStatus === 'Active' ? 'Suspend' : 'Activate'}
+                                        Suspended
+                                    </Button>
+                                    <Button 
+                                        variant="contained" 
+                                        color={'success'}
+                                        onClick={() => handelActiveStaus(user._id)}
+                                    >
+                                        Active
                                     </Button>
                                     <Button 
                                         variant="outlined" 
