@@ -195,9 +195,18 @@ exports.userDataManagcontroler = async(req,res) =>{
 
 exports.userStatusControler = async(req,res)=>{
     const id = req.params.id
-    console.log(req.params.id)
+   
   await regCollection.findByIdAndUpdate(id,{
         userStatus:"Suspend"
     })
+
+}
+
+exports.useractiveStatusUpdate = async(req,res)=>{
+            console.log(req.params.id)
+        const id =req.params.id
+        await regCollection.findByIdAndUpdate(id,{
+           userStatus:"Active" 
+        })
 
 }

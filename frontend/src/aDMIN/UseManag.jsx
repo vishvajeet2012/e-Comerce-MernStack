@@ -6,7 +6,7 @@ function UseManag() {
     const [users, setUsers] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
-   const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch("/api/userDataManag")
@@ -26,24 +26,37 @@ function UseManag() {
         setSnackbarOpen(true);
     };
 
-            /// handel active status 
-            const handelActiveStaus =  (id )=>{
-                const useractiveupdate =users.find(user=> user._id === id );
-                const newActiveStatus = useractiveupdate.status === Active;
-                    fetch(`/api/userActivestatus/${id}`,{
-                        method:"PUT",
-                        headers:{
-                            'Content-Type': 'application/json',
+    /// handle active status
+    const handleActiveStatus = (id) => {
+        const userToUpdate = users.find(user => user._id === id);
+        const newActiveStatus = userToUpdate.userStatus !== 'Active' ? 'Active' : 'Suspended';
 
-                        },
-                        body:JSON.stringify({status:newActiveStatus})
-                    })    
+        fetch(`/api/userActivestatus/${id}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: newActiveStatus }),
+        })
+        .then((res) => res.json())
+        .then((result) => {
+            if (result.success) {
+                setUsers(users.map(user => user._id === id ? { ...user, userStatus: newActiveStatus } : user));
+                setSnackbarMessage(`User ${newActiveStatus.toLowerCase()} successfully!`);
+                setSnackbarOpen(true);
+            } else {
+                setSnackbarMessage('Failed to update user status.');
+                setSnackbarOpen(true);
             }
+        });
+    };
 
+    /// handle suspended status
     const handleStatusChange = (id) => {
-        // const userToUpdate = users.find(user => user._id === id);
-        // const newStatus = userToUpdate.status === 'Active' ? 'Suspended' : 'Active';
-            fetch(`/api/userstatusmanag/${id}`, {
+        const userToUpdate = users.find(user => user._id === id);
+        const newStatus = userToUpdate.userStatus === 'Suspended' ? 'Active' : 'Suspended';
+
+        fetch(`/api/userstatusmanag/${id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
@@ -53,10 +66,10 @@ function UseManag() {
         .then((res) => res.json())
         .then((result) => {
             if (result.success) {
-                setUsers(users.map(user => user._id === id ? { ...user, status: newStatus } : user));
+                setUsers(users.map(user => user._id === id ? { ...user, userStatus: newStatus } : user));
                 setSnackbarMessage(`User ${newStatus.toLowerCase()} successfully!`);
                 setSnackbarOpen(true);
-                navigate  ("/userManag")
+                navigate("/userManag");
             } else {
                 setSnackbarMessage('Failed to update user status.');
                 setSnackbarOpen(true);
@@ -91,12 +104,12 @@ function UseManag() {
                                         color={'error'}
                                         onClick={() => handleStatusChange(user._id)}
                                     >
-                                        Suspended
+                                        Suspend
                                     </Button>
                                     <Button 
                                         variant="contained" 
                                         color={'success'}
-                                        onClick={() => handelActiveStaus(user._id)}
+                                        onClick={() => handleActiveStatus(user._id)}
                                     >
                                         Active
                                     </Button>
