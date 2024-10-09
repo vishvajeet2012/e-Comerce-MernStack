@@ -203,7 +203,7 @@ exports.userStatusControler = async(req,res)=>{
 }
 
 exports.useractiveStatusUpdate = async(req,res)=>{
-            console.log(req.params.id)
+           
         const id =req.params.id
         await regCollection.findByIdAndUpdate(id,{
            userStatus:"Active" 
