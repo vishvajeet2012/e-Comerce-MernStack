@@ -18,16 +18,16 @@ function Admin() {
             </header>
 
             <div className="w-11/12 flex flex-col md:flex-row justify-between mx-auto mt-8">
-                {/* Left Sidebar */}
-                <div className="md:w-1/4 bg-white shadow-md p-4 rounded-md">
-                    <Left />
-                </div>
-
-                {/* Admin Content */}
-                <div className="w-full md:w-3/4 bg-white shadow-md p-8 rounded-md mt-6 md:mt-0">
+            <div className="w-full md:w-3/4 bg-white shadow-md p-8 rounded-md mt-6 md:mt-0">
                     <h2 className="text-3xl font-semibold text-gray-700 mb-5 text-center">Welcome to the Admin Page</h2>
                     <p className="text-lg text-gray-500 text-center">Manage your products, queries, and more from here.</p>
                 </div>
+                <div className="md:w-1/2 bg-white shadow-md p-4 rounded-md">
+                    <Left />
+                </div>
+
+          
+            
             </div>
         </div>
     );
