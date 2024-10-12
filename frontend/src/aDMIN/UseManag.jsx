@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Snackbar, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 function UseManag() {
     const [users, setUsers] = useState([]);
@@ -14,17 +15,25 @@ function UseManag() {
             .then((result) => {
                 setUsers(result.userdata);
             });
-    }, []);
+    }, [users]);
 
     const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
+        setSnackbarOpen(false)
     };
 
-    const handleDelete = (id) => {
-        setUsers(users.filter(user => user._id !== id));
-        setSnackbarMessage('User deleted successfully!');
-        setSnackbarOpen(true);
-    };
+ function   handleDelete(id){
+        fetch(`/api/userEntryid/${id}`,{
+            method:"DELETE",
+        }).then((res)=>{
+            return res.json()
+        }).then((data)=>{
+     
+            console.log(data.message)
+           
+                toast.success(data.message)
+        
+        })
+    }
 
     /// handle active status
     const handleActiveStatus = (id) => {
@@ -98,7 +107,7 @@ function UseManag() {
                                 <TableCell>{user.firstName}</TableCell>
                                 <TableCell>{user.lastName}</TableCell>
                                 <TableCell>{user.userStatus}</TableCell>
-                                <TableCell>
+                                <TableCell >
                                     <Button 
                                         variant="contained" 
                                         color={'error'}

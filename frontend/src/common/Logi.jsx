@@ -53,12 +53,19 @@ export default function SignIn() {
         return response.json(); // Ensure that the result is returned
       })
       .then((result) => {
-        toast.success('Login successful!');
-        console.warn(result.data.userEmail); // Log result to check the data
        
-        if(result.data && result.data.userEmail=== "djritikshukla@gmail.com"){
-          navigate("/Admin")
-        }else{
+        // Log result to check the data
+       if(result.data.userStatus ==="Suspend"){
+        toast.error("Your account is error")
+       }
+      else  if(result.data && result.data.userEmail=== "djritikshukla@gmail.com"){
+        toast.success('Login successful!'); 
+        navigate("/Admin")
+
+        }
+        
+        else{
+          toast.success('Login successful!');
           navigate("/Product");
         }
       })

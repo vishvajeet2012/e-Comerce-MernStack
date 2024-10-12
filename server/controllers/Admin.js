@@ -210,3 +210,13 @@ exports.useractiveStatusUpdate = async(req,res)=>{
         })
 
 }
+
+
+exports.deleteUserController = async(req,res )=>{
+    const id = req.params.id
+     const result =    await regCollection.findByIdAndDelete(id)
+
+res.json({message:"Successfully delete"})
+
+
+}

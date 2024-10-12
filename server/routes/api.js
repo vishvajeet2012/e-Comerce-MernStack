@@ -46,7 +46,7 @@ router.patch("/queriesStatus/:id", AdminController.updateQueryStatus);
 router.get("/userDataManag", AdminController.userDataManagcontroler );// user management
 router.put("/userstatusmanag/:id",AdminController.userStatusControler)
 router.put("/userActivestatus/:id", AdminController.useractiveStatusUpdate)
-
+router.delete("/userEntryid/:id", AdminController.deleteUserController) // delete user 
 
 
 
