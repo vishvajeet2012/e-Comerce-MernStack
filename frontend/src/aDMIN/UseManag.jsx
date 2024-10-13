@@ -97,6 +97,7 @@ function UseManag() {
                         <TableRow>
                             <TableCell><strong>First Name</strong></TableCell>
                             <TableCell><strong>Last Name</strong></TableCell>
+                            <TableCell><strong>Email</strong></TableCell>
                             <TableCell><strong>Status</strong></TableCell>
                             <TableCell><strong>Actions</strong></TableCell>
                         </TableRow>
@@ -106,6 +107,7 @@ function UseManag() {
                             <TableRow key={user._id}>
                                 <TableCell>{user.firstName}</TableCell>
                                 <TableCell>{user.lastName}</TableCell>
+                                <TableCell>{user.userEmail}</TableCell>
                                 <TableCell>{user.userStatus}</TableCell>
                                 <TableCell >
                                     <Button 
