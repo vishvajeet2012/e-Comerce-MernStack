@@ -44,19 +44,19 @@ export default function SignIn() {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        console.log(response); // Log response to inspect
+        console.log(response); 
         if (!response.ok) {
           return response.json().then((errorData) => {
             throw new Error(errorData.message || "Login failed.");
           });
         }
-        return response.json(); // Ensure that the result is returned
+        return response.json(); 
       })
       .then((result) => {
        
-        // Log result to check the data
+       
        if(result.data.userStatus ==="Suspend"){
-        toast.error("Your account is error")
+        toast.error("Your account is Suspend Please Contact to Admin")
        }
       else  if(result.data && result.data.userEmail=== "djritikshukla@gmail.com"){
         toast.success('Login successful!'); 
