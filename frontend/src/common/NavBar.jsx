@@ -12,6 +12,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; // Import the cart icon
+import Badge from '@mui/material/Badge'; // Import Badge for notification
 import { Link } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Registration'];
@@ -21,6 +23,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const cartItemCount = 3; // Example: Replace with dynamic value
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -140,6 +143,13 @@ function NavBar() {
               </Button>
             ))}
           </Box>
+
+          {/* Cart Icon with Badge */}
+          <IconButton component={Link} to="/cart" sx={{ color: 'white', ml: 2 }}>
+            <Badge badgeContent={cartItemCount} color="error">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">

@@ -15,6 +15,7 @@ import UpdateProduct from './aDMIN/UpdateProduct'
 import QueryManagement from './aDMIN/QueryManagement'
 import QueryReply from './aDMIN/QueryReply'
 import UseManag from './aDMIN/UseManag'
+import AddToCart from './Frontend/AddToCart'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -39,7 +40,7 @@ function App() {
   <Route path='/queryManagement' element={<QueryManagement/>}/>
   <Route path='/queryReply/:id' element={<QueryReply/>}/>
  <Route path='/userManag' element={<UseManag/>} /> 
-
+<Route path='/cart' element={<AddToCart/>} />
 
          </Routes>
 <Footer/>
